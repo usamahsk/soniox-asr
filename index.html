@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content"/>
+  <title>درس — Lecture Transcriber</title>
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f0e8"/>
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="manifest" href="./manifest.webmanifest"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>"/>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/src/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./config.js"></script>
+</head>
+<body class="bg-[#1a1a1a] text-[#f5f0e8] antialiased">
+
+<!-- ================= AUTH GATE ================= -->
+<div id="authView" class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+  <div class="w-full max-w-md card-dark rounded-[24px] p-6 sm:p-8 shadow-2xl">
+    <div class="text-6xl text-center mb-2">📖</div>
+    <h1 class="text-3xl font-bold text-center text-[#f5f0e8] mt-2" data-i18n="appTitle">درس ٹرانسکرپشن</h1>
+    <p class="text-center text-[#8a8578] text-sm mt-1 mb-6" data-i18n="appSub">عربی + اردو • login to continue</p>
+
+    <form id="authForm" class="space-y-3">
+      <div>
+        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="emailLabel">ای میل ایڈریس</label>
+        <input id="email" type="email" inputmode="email" placeholder="you@example.com"
+          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
+          required/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="passLabel">راز کا لفظ (پاس ورڈ)</label>
+        <input id="pass" type="password" placeholder="••••••••"
+          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
+          required/>
+      </div>
+      <button id="login" type="submit" class="w-full bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-3.5 text-lg font-semibold hover:bg-[#5a6d4f] transition-transform active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="login">Login</button>
+      <p class="text-center text-xs text-[#8a8578] mt-4">
+        <span data-i18n="noAccount">No account?</span>
+        <button type="button" id="toSignup" class="text-[#6b7f5e] font-semibold hover:underline ml-1" data-i18n="signUp">Sign up</button>
+      </p>
+    </form>
+
+    <form id="signupForm" class="hidden space-y-3">
+      <div>
+        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="emailLabel">ای میل ایڈریس</label>
+        <input id="semail" type="email" inputmode="email" placeholder="you@example.com"
+          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
+          required/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="passLabel">راز کا لفظ (پاس ورڈ)</label>
+        <input id="spass" type="password" placeholder="••••••••"
+          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
+          required/>
+      </div>
+      <button type="submit" class="w-full bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-3.5 text-lg font-semibold hover:bg-[#5a6d4f] transition-transform active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="signup">Create account</button>
+      <p class="text-center text-xs text-[#8a8578] mt-4">
+        <span data-i18n="haveAccount">Already have an account?</span>
+        <button type="button" id="toLogin" class="text-[#6b7f5e] font-semibold hover:underline ml-1" data-i18n="login">Login</button>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden max-w-2xl mx-auto p-3 sm:p-4 pb-12 app-shell">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-20 bg-[#1a1a1a]/90 backdrop-blur-md border-b border-[#245,240,232,0.08] py-3 flex items-center justify-between" style="padding-top:calc(0.75rem + env(safe-area-inset-top))">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-[#6b7f5e] flex items-center justify-center text-xl">📖</div>
+      <div>
+        <div class="font-bold text-lg leading-tight text-[#f5f0e8]" data-i18n="appTitle">📖 درس ٹرانسکرپشن</div>
+        <div id="who" class="text-xs text-[#8a8578] mt-0.5"></div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <select id="applang" class="bg-[#2d2d2d] border border-[#1a1a1a,0.08] rounded-xl px-3 py-2 text-xs text-[#f5f0e8] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e]">
+        <option value="ur">اردو</option>
+        <option value="en">EN</option>
+      </select>
+      <button id="logout" class="text-xs font-medium text-[#8a8578] bg-[#2d2d2d] hover:bg-[#1a1a1a] rounded-lg px-3 py-2 transition-colors" data-i18n="logout">Logout</button>
+    </div>
+  </header>
+
+  <!-- Upload card -->
+  <section class="card rounded-[24px] p-4 sm:p-6 mt-4 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-bold text-lg text-[#1a1a1a]" data-i18n="newLecture">nueva grabación</h2>
+      <span id="uploadStatus" class="text-xs text-[#8a8578] hidden"></span>
+    </div>
+
+    <label for="file" class="block w-full border-2 border-dashed border-[#1a1a1a,0.08] rounded-[24px] p-8 sm:p-10 text-center cursor-pointer hoverable transition-all hover:border-[#6b7f5e] hover:bg-[#f5f0e8,0.3]" id="dropZone">
+      <div class="text-4xl mb-2">📁</div>
+      <span class="text-lg font-semibold text-[#1a1a1a]" data-i18n="selectFile">ریکارڈنگ منتخب کریں</span>
+      <p class="text-xs text-[#8a8578] mt-1" data-i18n="fileHint">m4a / mp3 / wav / opus — 1 تا 4 گھنٹے</p>
+    </label>
+    <input type="file" id="file" accept="audio/*,.opus,.mp3,.m4a,.wav,.ogg,.mp4" class="hidden"/>
+
+    <div id="fileInfo" class="hidden mt-4">
+      <div class="flex items-center justify-between p-3 bg-[#ede8dc] rounded-xl mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-xs text-[#f5f0e8]">🎵</div>
+          <div>
+            <div class="text-sm font-medium text-[#1a1a1a]" id="fname"></div>
+            <div class="text-xs text-[#8a8578]" id="fsize"></div>
+          </div>
+        </div>
+        <button id="removeFile" class="text-[#b85c5c] hover:text-[#a84c4c] text-sm" title="Remove file">✕</button>
+      </div>
+
+      <div class="mb-3">
+        <label class="block text-xs font-medium text-[#8a8578] mb-2" data-i18n="langInLecture">🌐 Languages in lecture</label>
+        <select id="lang" class="w-full border border-[#1a1a1a,0.08] rounded-xl p-3 bg-[#f5f0e8] text-[#1a1a1a] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e]">
+          <option value="ur-ar" selected>اردو + عربی (Urdu + Arabic)</option>
+          <option value="ur">اردو صرف (Urdu only)</option>
+          <option value="ar">عربی صرف (Arabic only)</option>
+          <option value="hi">ہندی (Hindi)</option>
+          <option value="gu">گجراتی (Gujarati)</option>
+          <option value="multi">Auto-detect (all)</option>
+        </select>
+      </div>
+
+      <button id="up" class="w-full bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-4 text-lg font-semibold hover:bg-[#5a6d4f] transition-all active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg" data-i18n="uploadBtn">⬆️ Upload + Transcribe</button>
+
+      <div class="mt-4">
+        <div class="flex justify-between text-xs text-[#8a8578] mb-1">
+          <span data-i18n="progress">Progress</span>
+          <span id="pctText">0%</span>
+        </div>
+        <div class="h-2 bg-[#ede8dc] rounded-full overflow-hidden">
+          <div id="bar" class="h-full bg-[#6b7f5e] rounded-full transition-all duration-300" style="width:0%"></div>
+        </div>
+        <div id="st" class="text-sm text-[#8a8578] mt-2 min-h-[1.5rem]"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Jobs list -->
+  <section class="card rounded-[24px] p-4 sm:p-6 mt-4 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-bold text-lg text-[#1a1a1a]" data-i18n="myLectures">میری دروس</h2>
+      <span id="jobsCount" class="text-xs font-medium text-[#1a1a1a] bg-[#ede8dc] px-2.5 py-0.5 rounded-full">0</span>
+    </div>
+
+    <div id="jobsSkeleton" class="space-y-3">
+      <div class="skeleton h-14 w-3/4"></div>
+      <div class="skeleton h-14 w-1/2"></div>
+      <div class="skeleton h-14 w-full"></div>
+    </div>
+
+    <div id="jobs" class="divide-y divide-[#1a1a1a,0.08] hidden"></div>
+
+    <div id="jobsEmpty" class="text-center py-12 hidden">
+      <div class="text-6xl mb-3">📭</div>
+      <h3 class="font-bold text-lg text-[#1a1a1a]" data-i18n="noLectures">No lectures yet</h3>
+      <p class="text-sm text-[#8a8578] mt-1 max-w-xs mx-auto" data-i18n="emptySub">Upload a recording to get started</p>
+    </div>
+  </section>
+
+  <!-- Transcript viewer -->
+  <section id="transcriptSection" class="hidden card rounded-[24px] p-4 sm:p-6 mt-4 shadow-sm">
+    <div class="flex flex-wrap gap-2 mb-4 sm:mb-6">
+      <button id="dlTxt" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="dlTxt">📄 .txt</button>
+      <button id="dlDoc" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="dlDoc">📝 Word</button>
+      <button id="dlPdf" class="flex-1 min-w-[120px] bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-3 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#5a6d4f] shadow-lg" data-i18n="dlPdf">🖨️ PDF</button>
+      <button id="copyTxt" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="copyTxt">📋 Copy</button>
+      <button id="shareTxt" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="shareTxt">🔗 Share</button>
+    </div>
+
+    <div id="transcript" class="whitespace-pre-wrap leading-[2.4] min-h-[160px] text-[#1a1a1a] bg-[#ede8dc] p-4 rounded-xl border border-[#1a1a1a,0.08]">…</div>
+
+    <div id="transcriptActions" class="mt-4 flex items-center justify-between text-xs text-[#8a8578]">
+      <span id="jobMeta"></span>
+      <button id="deleteJob" class="text-[#b85c5c] hover:text-[#a84c4c] hover:underline font-medium" data-i18n="delete">Delete lecture</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Print-only transcript -->
+<div class="print-area" id="print-area"></div>
+
+<!-- Toast container -->
+<div id="toastContainer" class="toast"></div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const C = window.APP_CONFIG;
+  const sb = createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY);
+
+  let jobId = null, fullText = "", fullName = "lecture", appLang = 'ur', currentJob = null, polling = false;
+
+  const I18N = {
+    ur: {
+      appTitle: '📖 درس ٹرانسکرپشن',
+      appSub: 'عربی + اردو • login to continue',
+      emailLabel: 'ای میل ایڈریس',
+      passLabel: 'راز کا لفظ (پاس ورڈ)',
+      login: 'Login',
+      signup: 'Sign up',
+      signUp: 'Sign up',
+      noAccount: 'No account?',
+      haveAccount: 'Already have an account?',
+      logout: 'Logout',
+      newLecture: 'نئی ریکارڈنگ',
+      selectFile: 'ریکارڈنگ منتخب کریں',
+      fileHint: 'm4a / mp3 / wav / opus — 1 تا 4 گھنٹے',
+      langInLecture: '🌐 Languages in lecture',
+      uploadBtn: '⬆️ Upload + Transcribe',
+      progress: 'Progress',
+      myLectures: 'میری دروس',
+      noLectures: 'No lectures yet',
+      emptySub: 'Upload a recording to get started',
+      dlTxt: '📄 .txt',
+      dlDoc: '📝 Word',
+      dlPdf: '🖨️ PDF',
+      copyTxt: '📋 Copy',
+      shareTxt: '🔗 Share',
+      delete: 'Delete lecture',
+      deleting: 'حذف ہو رہا ہے...',
+      deleted: 'حذف کر دیا گیا',
+      fileTooLarge: 'فائل بہت بڑی ہے (حد 100MB)',
+      selectFirst: 'پہلے فائل منتخب کریں',
+      loginAgain: 'Login again',
+      uploading: 'uploading …',
+      processing: 'processing… 1h ~3-5 min',
+      done: 'done ✓',
+      error: 'error',
+      loaded: 'loaded ✓',
+    },
+    en: {
+      appTitle: '📖 Lecture Transcriber',
+      appSub: 'Arabic + Urdu • login to continue',
+      emailLabel: 'Email address',
+      passLabel: 'Password',
+      login: 'Login',
+      signup: 'Create account',
+      signUp: 'Sign up',
+      noAccount: 'No account?',
+      haveAccount: 'Already have an account?',
+      logout: 'Logout',
+      newLecture: 'New recording',
+      selectFile: 'Select recording',
+      fileHint: 'm4a / mp3 / wav / opus — 1 to 4 hours',
+      langInLecture: '🌐 Languages in lecture',
+      uploadBtn: '⬆️ Upload + Transcribe',
+      progress: 'Progress',
+      myLectures: 'My lectures',
+      noLectures: 'No lectures yet',
+      emptySub: 'Upload a recording to get started',
+      dlTxt: '📄 .txt',
+      dlDoc: '📝 Word',
+      dlPdf: '🖨️ PDF',
+      copyTxt: '📋 Copy',
+      shareTxt: '🔗 Share',
+      delete: 'Delete lecture',
+      deleting: 'Deleting...',
+      deleted: 'Deleted',
+      fileTooLarge: 'File too large (max 100MB)',
+      selectFirst: 'Select a file first',
+      loginAgain: 'Login again',
+      uploading: 'uploading …',
+      processing: 'processing… 1h ~3-5 min',
+      done: 'done ✓',
+      error: 'error',
+      loaded: 'loaded ✓',
+    },
+  };
+
+  function t(k) { return I18N[appLang]?.[k] || I18N.en[k] || k; }
+
+  function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const k = el.dataset.i18n;
+      const val = t(k);
+      if (val) el.textContent = val;
+    });
+    document.documentElement.lang = appLang === 'ur' ? 'ur' : 'en';
+    document.documentElement.dir = appLang === 'ur' ? 'rtl' : 'ltr';
+  }
+
+  function toast(msg, type = 'ok') {
+    const c = document.getElementById('toastContainer');
+    const d = document.createElement('div');
+    d.className = 'toast-item ' + type;
+    d.textContent = msg;
+    c.appendChild(d);
+    setTimeout(() => {
+      d.style.opacity = '0';
+      d.style.transform = 'translateY(100%)';
+      setTimeout(() => d.remove(), 300);
+    }, 3000);
+  }
+
+  function v(id) { return document.getElementById(id).value.trim(); }
+
+  function setLoading(btn, isLoading) {
+    if (isLoading) {
+      btn.disabled = true;
+      btn.dataset.orig = btn.innerHTML;
+      btn.innerHTML = '<span class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin inline-block mr-2"></span> ' + t('loading');
+    } else {
+      btn.disabled = false;
+      if (btn.dataset.orig) btn.innerHTML = btn.dataset.orig;
+    }
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  async function refresh() {
+    const { data: { session: s } } = await sb.auth.getSession();
+    document.getElementById('authView').style.display = s ? 'none' : 'flex';
+    document.getElementById('app').classList.toggle('hidden', !s);
+    if (s) {
+      document.getElementById('who').textContent = s.user.email;
+      loadJobs();
+    }
+  }
+
+  document.getElementById('applang').onchange = e => { appLang = e.target.value; applyLang(); };
+
+  // Auth: login
+  document.getElementById('login').onclick = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('login');
+    setLoading(btn, true);
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email: v('email'), password: v('pass') });
+      if (error) { toast(error.message, 'bad'); return; }
+      refresh();
+    } finally { setLoading(btn, false); }
+  };
+
+  // Auth: signup
+  document.getElementById('signup').onclick = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('signup');
+    setLoading(btn, true);
+    try {
+      const { error } = await sb.auth.signUp({ email: v('semail'), password: v('spass') });
+      toast(error ? error.message : 'Account created — now Login', error ? 'bad' : 'ok');
+    } finally { setLoading(btn, false); }
+  };
+
+  document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+
+  // Toggle auth forms
+  document.getElementById('toSignup').onclick = () => {
+    document.getElementById('login').closest('form').classList.add('hidden');
+    document.getElementById('signupForm').classList.remove('hidden');
+  };
+  document.getElementById('toLogin').onclick = () => {
+    document.getElementById('signupForm').classList.add('hidden');
+    document.getElementById('login').closest('form').classList.remove('hidden');
+  };
+
+  // File handling
+  const fileInput = document.getElementById('file');
+  const dropZone = document.getElementById('dropZone');
+  const fileInfo = document.getElementById('fileInfo');
+  const fnameEl = document.getElementById('fname');
+  const fsizeEl = document.getElementById('fsize');
+  const removeFileBtn = document.getElementById('removeFile');
+
+  function showFile(f) {
+    fileInfo.classList.remove('hidden');
+    fnameEl.textContent = f.name;
+    fsizeEl.textContent = (f.size / 1048576).toFixed(1) + 'MB';
+  }
+
+  fileInput.onchange = e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (f.size > 100 * 1024 * 1024) { toast(t('fileTooLarge'), 'bad'); e.target.value = ''; return; }
+    showFile(f);
+  };
+
+  removeFileBtn.onclick = () => {
+    fileInfo.classList.add('hidden');
+    fileInput.value = '';
+  };
+
+  // Drag & drop visual feedback
+  ['dragenter', 'dragover'].forEach(ev => {
+    dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('border-[#6b7f5e]', 'bg-[#f5f0e8,0.2]'); });
+  });
+  ['dragleave', 'drop'].forEach(ev => {
+    dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.remove('border-[#6b7f5e]', 'bg-[#f5f0e8,0.2]'); });
+  });
+  dropZone.addEventListener('drop', e => {
+    const files = e.dataTransfer.files;
+    if (files.length) fileInput.files = files;
+    showFile(files[0]);
+  });
+
+  const upBtn = document.getElementById('up');
+  upBtn.onclick = async () => {
+    const f = fileInput.files[0];
+    if (!f) return alert(t('selectFirst'));
+    if (f.size > 100 * 1024 * 1024) { toast(t('fileTooLarge'), 'bad'); return; }
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return alert(t('loginAgain'));
+
+    setLoading(upBtn, true);
+    try {
+      const lang = document.getElementById('lang').value;
+      document.getElementById('st').textContent = t('uploading') + ' ' + (f.size / 1048576).toFixed(1) + 'MB…';
+      document.getElementById('bar').style.width = '10%';
+
+      const path = `${session.user.id}/${Date.now()}_${f.name}`;
+      const { error: upErr } = await sb.storage.from('lectures').upload(path, f, { upsert: false });
+      if (upErr) throw new Error('storage: ' + upErr.message);
+
+      document.getElementById('bar').style.width = '60%';
+      const { data: job, error: dbErr } = await sb.from('jobs').insert({
+        audio_path: path,
+        file_name: f.name,
+        user_id: session.user.id,
+        status: 'uploading',
+      }).select().single();
+      if (dbErr) throw new Error(dbErr.message);
+
+      jobId = job.id;
+      fullName = (f.name || 'lecture').replace(/\.[^.]+$/, '');
+      currentJob = { id: job.id, audio_path: path, file_name: f.name };
+
+      const r = await fetch(`${C.SUPABASE_URL}/functions/v1/${C.TRANSCRIBE_FN}`, {
+        method: 'POST',
+        headers: {
+          'apikey': C.SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + session.access_token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ job_id: jobId, lang }),
+      });
+      if (!r.ok) throw new Error('start failed: ' + await r.text());
+
+      document.getElementById('bar').style.width = '90%';
+      document.getElementById('st').textContent = t('processing');
+      loadJobs();
+      poll();
+    } catch (e) {
+      toast(e.message, 'bad');
+      document.getElementById('st').textContent = 'error';
+    } finally {
+      setLoading(upBtn, false);
+    }
+  };
+
+  async function poll() {
+    if (polling) return;
+    polling = true;
+    const { data: { session } } = await sb.auth.getSession();
+    const r = await fetch(`${C.SUPABASE_URL}/functions/v1/${C.STATUS_FN}`, {
+      method: 'POST',
+      headers: {
+        'apikey': C.SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + session.access_token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ job_id: jobId }),
+    });
+    const j = await r.json();
+    if (j.status === 'completed') {
+      fullText = j.text;
+      show(fullText);
+      document.getElementById('bar').style.width = '100%';
+      document.getElementById('st').textContent = t('done');
+      loadJobs();
+      toast('Transcription complete', 'ok');
+      polling = false;
+    } else if (j.status === 'error' || j.error) {
+      document.getElementById('st').textContent = 'error: ' + (j.error || '');
+      loadJobs();
+      toast('Transcription failed', 'bad');
+      polling = false;
+    } else {
+      document.getElementById('st').textContent = t('processing');
+      setTimeout(poll, 10000);
+    }
+  }
+
+  async function loadJobs() {
+    const { data } = await sb.from('jobs').select('id,file_name,status,created_at,audio_path,transcript_text').order('created_at', { ascending: false }).limit(30);
+
+    const skeleton = document.getElementById('jobsSkeleton');
+    const jobsEl = document.getElementById('jobs');
+    const emptyEl = document.getElementById('jobsEmpty');
+    const countEl = document.getElementById('jobsCount');
+
+    skeleton.classList.add('hidden');
+    jobsEl.classList.remove('hidden');
+    countEl.textContent = (data || []).length;
+    emptyEl.classList.toggle('hidden', (data || []).length > 0);
+
+    jobsEl.innerHTML = '';
+    (data || []).forEach(j => {
+      const isCompleted = j.status === 'completed';
+      const isCurrent = j.id === jobId;
+      const d = document.createElement('button');
+      d.className = 'w-full text-right py-3.5 px-4 rounded-xl flex justify-between items-start gap-3 transition-all ' +
+        (isCurrent ? 'bg-[#ede8dc] ring-1 ring-[#6b7f5e]' : 'hover:bg-[#ede8dc,0.5]') +
+        ' ' + (isCompleted ? '' : 'animate-pulse');
+      d.innerHTML = `
+        <div class="flex-1 min-w-0 text-right">
+          <div class="flex items-center justify-between mb-1">
+            <span class="truncate font-medium text-[#1a1a1a]">${esc(j.file_name || '')}</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-full ${isCompleted ? 'bg-[#5a7a5a,0.2] text-[#5a7a5a]' : j.status === 'error' ? 'bg-[#b85c5c,0.2] text-[#b85c5c]' : 'bg-[#8a8578,0.15] text-[#8a8578]'}">${j.status}</span>
+          </div>
+          <div class="text-[11px] text-[#8a8578]">${new Date(j.created_at).toLocaleDateString()}</div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          ${isCompleted ? `<button class="w-8 h-8 border border-[#1a1a1a,0.08] rounded-lg flex items-center justify-center text-[11px] hover:bg-[#1a1a1a,0.05] transition-colors" title="${t('delete')}" aria-label="${t('delete')} ${esc(j.file_name)}" onclick="event.stopPropagation();window.handleDelete('${j.id}','${esc(j.audio_path)}','${esc(j.file_name)}')">🗑️</button>` : '<span class="w-5 h-5 rounded-full border-2 border-[#1a1a1a,0.08] border-t-[#6b7f5e] shrink-0 animate-spin"></span>'}
+        </div>
+      `;
+      d.onclick = () => {
+        jobId = j.id;
+        fullName = (j.file_name || 'lecture').replace(/\.[^.]+$/, '');
+        currentJob = { id: j.id, audio_path: j.audio_path, file_name: j.file_name };
+        if (j.transcript_text) {
+          fullText = j.transcript_text;
+          show(fullText);
+          document.getElementById('st').textContent = t('loaded');
+        } else {
+          poll();
+        }
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      };
+      jobsEl.appendChild(d);
+    });
+  }
+
+  window.handleDelete = async function (jobIdDel, audioPath, fileName) {
+    if (!confirm(t('delete') + ' "' + fileName + '"?')) return;
+    const btn = document.querySelector(`button[onclick*="${jobIdDel}"]`);
+    if (btn) { btn.disabled = true; btn.innerHTML = t('deleting'); }
+    try {
+      const { error: stErr } = await sb.storage.from('lectures').remove([audioPath]);
+      if (stErr) throw new Error(stErr.message);
+      const { error: dbErr } = await sb.from('jobs').delete().eq('id', jobIdDel);
+      if (dbErr) throw new Error(dbErr.message);
+      toast(t('deleted'), 'ok');
+      if (jobId === jobIdDel) {
+        jobId = null; fullText = ''; fullName = 'lecture';
+        document.getElementById('transcript').textContent = '…';
+        document.getElementById('transcriptSection').classList.add('hidden');
+        ['dlTxt', 'dlDoc', 'dlPdf'].forEach(id => document.getElementById(id).disabled = true);
+      }
+      loadJobs();
+    } catch (e) {
+      toast(e.message, 'bad');
+      if (btn) { btn.disabled = false; btn.innerHTML = '🗑️'; }
+    }
+  };
+
+  function esc(s) { return s ? String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;') : ''; }
+
+  function show(txt) {
+    document.getElementById('transcript').textContent = txt;
+    document.getElementById('transcriptSection').classList.remove('hidden');
+    document.getElementById('jobMeta').textContent = fullName;
+    ['dlTxt', 'dlDoc', 'dlPdf', 'copyTxt', 'shareTxt'].forEach(id => document.getElementById(id).disabled = false);
+  }
+
+  function setSt(txt) { document.getElementById('st').textContent = txt; }
+
+  // Downloads
+  function dl(blob, name) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }
+
+  document.getElementById('dlTxt').onclick = () => dl(new Blob([fullText], { type: 'text/plain;charset=utf-8' }), fullName + '.txt');
+
+  document.getElementById('dlDoc').onclick = () => {
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'></head><body dir='rtl' style='font-family:Noto Nastaliq Urdu,Amiri'>${fullText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br>')}</body></html>`;
+    dl(new Blob(['\ufeff', html], { type: 'application/msword' }), fullName + '.doc');
+  };
+
+  document.getElementById('dlPdf').onclick = () => {
+    const pa = document.getElementById('print-area');
+    pa.innerHTML = `<h2>${esc(fullName)}</h2><div>${esc(fullText).replace(/\n/g, '<br>')}</div>`;
+    window.print();
+  };
+
+  document.getElementById('copyTxt').onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(fullText);
+      toast(t('copyTxt') + ' — copied', 'ok');
+    } catch (e) { toast('copy failed', 'bad'); }
+  };
+
+  document.getElementById('shareTxt').onclick = async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: fullName, text: fullText }); return; } catch (e) {}
+    }
+    try {
+      await navigator.clipboard.writeText(fullText);
+      toast('link/text copied to clipboard', 'ok');
+    } catch (e) { toast('share failed', 'bad'); }
+  };
+
+  document.getElementById('deleteJob').onclick = () => {
+    if (!currentJob) return;
+    window.handleDelete(currentJob.id, currentJob.audio_path, currentJob.file_name);
+  };
+
+  applyLang();
+  refresh();
+</script>
+</body>
+</html>
