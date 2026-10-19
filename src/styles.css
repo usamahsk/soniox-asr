@@ -531,7 +531,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 .job-name { font-size: .875rem; font-weight: 600; color: var(--color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .job-meta { font-size: .75rem; color: var(--color-text-muted); margin-top: .15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.job-right { display: flex; flex-direction: row; align-items: center; gap: .375rem; flex-shrink: 0; }
+.job-right { display: flex; flex-direction: row; align-items: center; gap: .375rem; flex-shrink: 0; margin-top: .5rem; }
 .job-spinner { color: var(--color-accent); }
 .job-spinner-pulse { animation: spin .7s linear infinite, pulse-opacity 2s ease infinite; }
 @keyframes pulse-opacity { 0%,100%{opacity:1} 50%{opacity:.5} }

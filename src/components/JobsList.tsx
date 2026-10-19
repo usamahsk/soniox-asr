@@ -90,6 +90,7 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
               const isDeleting = deletingId === job.id;
               return (
                 <div
+                style={{display:'block'}}
                   key={job.id}
                   className={`job-item ${isActive ? 'job-item-active' : ''}`}
                   role="button"
