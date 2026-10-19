@@ -338,6 +338,7 @@ button:active:not(:disabled) { transform: scale(.97); }
   font-size: .7rem; font-weight: 700; padding: .2rem .55rem;
   border-radius: var(--radius-full); white-space: nowrap;
   text-transform: uppercase; letter-spacing: .03em;
+  flex-shrink: 0; max-width: 100%; overflow: hidden;
 }
 .badge-done      { background: var(--color-ok-light); color: var(--color-ok); }
 .badge-processing { background: rgba(90,120,72,.1); color: var(--color-accent); }
@@ -509,8 +510,9 @@ button:active:not(:disabled) { transform: scale(.97); }
 .jobs-empty-title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
 .jobs-empty-sub { font-size: .85rem; color: var(--color-text-muted); margin-top: .25rem; }
 
-.jobs-scroll { max-height: 360px; }
-.jobs-list { display: flex; flex-direction: column; gap: .375rem; padding-bottom: .25rem; }
+.jobs-scroll { max-height: 360px; overflow: hidden; border-radius: var(--radius-md); }
+.jobs-scroll [data-radix-scroll-area-viewport] { overflow-y: auto; overflow-x: hidden; padding-inline-end: 4px; }
+.jobs-list { display: flex; flex-direction: column; gap: .375rem; padding: 2px; padding-bottom: .25rem; min-width: 0; }
 
 .job-item {
   display: flex; align-items: center; gap: .75rem;
@@ -518,7 +520,8 @@ button:active:not(:disabled) { transform: scale(.97); }
   border: 1.5px solid transparent; background: transparent;
   cursor: pointer; text-align: start;
   transition: background .15s, border-color .15s;
-  width: 100%;
+  width: 100%; max-width: 100%;
+  min-width: 0; overflow: hidden; box-sizing: border-box;
 }
 .job-item:hover:not(.job-item-active):not(:disabled) { background: var(--color-bg); border-color: var(--color-border); }
 .job-item-active { background: var(--color-accent-light); border-color: var(--color-accent); }
