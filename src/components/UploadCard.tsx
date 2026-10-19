@@ -5,6 +5,7 @@ import { Button } from './ui/Button';
 import { Progress } from './ui/Progress';
 import { useToast } from './ui/Toast';
 import type { AppLang, LangCode } from '../types';
+import { Mic, FolderOpen, Folder, X, ChevronDown, Check, Upload, AudioLines } from 'lucide-react';
 import { makeT } from '../i18n';
 
 interface UploadCardProps {
@@ -68,7 +69,7 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
   return (
     <section className="card upload-card">
       <div className="card-header">
-        <div className="card-header-icon">🎙️</div>
+        <div className="card-header-icon"><Mic size={20} strokeWidth={2.2} /></div>
         <div>
           <h2 className="card-title">{t('newLecture')}</h2>
           <p className="card-subtitle">{t('fileHint')}</p>
@@ -97,7 +98,7 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
 
           {file ? (
             <div className="file-info">
-              <div className="file-info-icon">🎵</div>
+              <div className="file-info-icon"><AudioLines size={18} strokeWidth={2.2} /></div>
               <div className="file-info-text">
                 <div className="file-name">{file.name}</div>
                 <div className="file-size">{(file.size / 1048576).toFixed(1)} MB</div>
@@ -107,14 +108,12 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
                 onClick={e => { e.stopPropagation(); setFile(null); if (fileRef.current) fileRef.current.value = ''; }}
                 aria-label="Remove file"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+                <X size={16} strokeWidth={2.5} />
               </button>
             </div>
           ) : (
             <div className="drop-zone-empty">
-              <div className="drop-zone-icon">{dragging ? '📂' : '📁'}</div>
+              <div className="drop-zone-icon">{dragging ? <FolderOpen size={30} strokeWidth={1.8} /> : <Folder size={30} strokeWidth={1.8} />}</div>
               <div className="drop-zone-label">{dragging ? t('dropHere') : t('selectFile')}</div>
               <div className="drop-zone-hint">Click or drag & drop</div>
             </div>
@@ -131,9 +130,7 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
               <SelectPrimitive.Trigger id="lecture-lang" className="select-trigger" aria-label={t('langInLecture')}>
                 <SelectPrimitive.Value />
                 <SelectPrimitive.Icon className="select-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="6 9 12 15 18 9"/>
-                  </svg>
+                  <ChevronDown size={14} />
                 </SelectPrimitive.Icon>
               </SelectPrimitive.Trigger>
               <SelectPrimitive.Portal>
@@ -143,9 +140,7 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
                       <SelectPrimitive.Item key={opt.value} value={opt.value} className="select-item">
                         <SelectPrimitive.ItemText>{t(opt.labelKey as any)}</SelectPrimitive.ItemText>
                         <SelectPrimitive.ItemIndicator className="select-indicator">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
+                          <Check size={14} strokeWidth={2.5} />
                         </SelectPrimitive.ItemIndicator>
                       </SelectPrimitive.Item>
                     ))}
@@ -161,7 +156,7 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
           type="submit" size="lg" loading={uploading}
           disabled={!file || uploading}
           className="w-full"
-          icon={!uploading ? <span>⬆️</span> : undefined}
+          icon={!uploading ? <Upload size={17} strokeWidth={2.2} /> : undefined}
         >
           {uploading ? statusLabel || t('uploading') : t('uploadBtn')}
         </Button>
@@ -172,7 +167,7 @@ export function UploadCard({ lang, uploading, uploadProgress, onUpload }: Upload
         )}
         {!uploading && uploadProgress.pct === 100 && (
           <div className="upload-done-banner">
-            <span>✓</span> {t('done')}
+            <Check size={15} strokeWidth={3} /> {t('done')}
           </div>
         )}
       </form>

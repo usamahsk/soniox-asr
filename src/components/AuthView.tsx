@@ -4,6 +4,7 @@ import { Input } from './ui/Input';
 import { Button } from './ui/Button';
 import { useToast } from './ui/Toast';
 import type { AppLang } from '../types';
+import { BookOpenText } from 'lucide-react';
 import { makeT } from '../i18n';
 
 interface AuthViewProps {
@@ -66,7 +67,7 @@ export function AuthView({ onLogin, onSignup, lang }: AuthViewProps) {
       <div className="auth-card">
         {/* Logo */}
         <div className="auth-logo">
-          <div className="auth-logo-icon">📖</div>
+          <div className="auth-logo-icon"><BookOpenText size={30} strokeWidth={2} /></div>
           <h1 className="auth-title">{t('appTitle')}</h1>
           <p className="auth-subtitle">{t('appSub')}</p>
         </div>

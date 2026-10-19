@@ -4,6 +4,7 @@ import { Button } from './ui/Button';
 import { useDownload } from '../hooks/useDownload';
 import { useToast } from './ui/Toast';
 import type { Job, AppLang } from '../types';
+import { FileText, FileDiff, Printer, Copy, Share2, Trash2 } from 'lucide-react';
 import { makeT } from '../i18n';
 
 interface TranscriptViewerProps {
@@ -64,7 +65,7 @@ export function TranscriptViewer({ job, fullText, lang, onDeleteJob }: Transcrip
       <div className="transcript-header">
         <div>
           <h2 className="card-title transcript-title">
-            <span className="transcript-icon">📄</span>
+            <span className="transcript-icon"><FileText size={19} strokeWidth={2.2} /></span>
             {fullName}
           </h2>
           <div className="transcript-meta">
@@ -76,23 +77,23 @@ export function TranscriptViewer({ job, fullText, lang, onDeleteJob }: Transcrip
       {/* Action buttons */}
       <div className="transcript-actions">
         <Button variant="outline" size="sm" onClick={downloadTxt}
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>}>
+          icon={<FileText size={14} />}>
           .txt
         </Button>
         <Button variant="outline" size="sm" onClick={downloadDoc} loading={docBusy}
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>}>
+          icon={<FileDiff size={14} />}>
           .docx
         </Button>
         <Button variant="outline" size="sm" onClick={handleDownloadPdf}
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>}>
+          icon={<Printer size={14} />}>
           PDF
         </Button>
         <Button variant="outline" size="sm" onClick={handleCopy}
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>}>
+          icon={<Copy size={14} />}>
           {t('copyTxt')}
         </Button>
         <Button variant="outline" size="sm" onClick={handleShare}
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>}>
+          icon={<Share2 size={14} />}>
           {t('shareTxt')}
         </Button>
       </div>
@@ -125,9 +126,7 @@ export function TranscriptViewer({ job, fullText, lang, onDeleteJob }: Transcrip
           onClick={() => onDeleteJob(job)}
           aria-label={t('delete')}
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
-          </svg>
+          <Trash2 size={13} />
           {t('delete')}
         </button>
       </div>

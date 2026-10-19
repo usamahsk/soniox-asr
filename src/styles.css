@@ -107,10 +107,12 @@ button:active:not(:disabled) { transform: scale(.97); }
 .app-logo-icon {
   width: 38px; height: 38px; border-radius: var(--radius-md);
   background: linear-gradient(135deg, var(--color-accent-light) 0%, #d4e6c5 100%);
-  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-accent);
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
 }
+.app-logo-icon svg, .card-header-icon svg, .auth-logo-icon svg { display: block; }
 .app-logo-title { font-size: .9rem; font-weight: 700; color: var(--color-text); line-height: 1.2; }
 .app-logo-sub { font-size: .7rem; color: var(--color-text-muted); }
 
@@ -222,7 +224,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 @keyframes cardIn { from { opacity:0; transform:translateY(20px) scale(.97); } to { opacity:1; transform:none; } }
 
 .auth-logo { text-align: center; margin-bottom: 1.75rem; }
-.auth-logo-icon { font-size: 3rem; display: block; margin-bottom: .625rem; }
+.auth-logo-icon {
+  color: var(--color-accent); font-size: 3rem; display: block; margin-bottom: .625rem; }
 .auth-title { font-size: 1.5rem; font-weight: 800; color: var(--color-text); margin-bottom: .25rem; }
 .auth-subtitle { font-size: .85rem; color: var(--color-text-muted); }
 
@@ -256,6 +259,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 }
 .card-header { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: 1.25rem; }
 .card-header-icon {
+  color: var(--color-accent);
   width: 40px; height: 40px; border-radius: var(--radius-md); flex-shrink: 0;
   background: var(--color-accent-light);
   display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
@@ -425,7 +429,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 .toast-item-ok  { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
 .toast-item-bad { background: #fef2f2; border-color: #fecaca; color: #c0392b; }
 .toast-item-info { background: var(--color-surface); border-color: var(--color-border); color: var(--color-text); }
-.toast-icon { font-size: 1rem; flex-shrink: 0; font-weight: 700; margin-top: .05rem; }
+.toast-icon {
+  display: flex; flex-shrink: 0; font-size: 1rem; flex-shrink: 0; font-weight: 700; margin-top: .05rem; }
 .toast-message { font-size: .875rem; font-weight: 500; flex: 1; }
 .toast-close {
   font-size: 1.1rem; line-height: 1; cursor: pointer; background: none; border: none;
@@ -453,13 +458,16 @@ button:active:not(:disabled) { transform: scale(.97); }
 .drop-zone-has-file { cursor: default; border-style: solid; border-color: var(--color-border); background: var(--color-surface); }
 
 .drop-zone-empty { display: flex; flex-direction: column; align-items: center; gap: .5rem; }
-.drop-zone-icon { font-size: 2.5rem; transition: transform .2s; }
+.drop-zone-icon {
+  color: var(--color-text-muted);
+  display: flex; justify-content: center; font-size: 2.5rem; transition: transform .2s; }
 .drop-zone:hover .drop-zone-icon { transform: scale(1.1); }
 .drop-zone-label { font-size: .95rem; font-weight: 700; color: var(--color-text); }
 .drop-zone-hint { font-size: .8rem; color: var(--color-text-muted); }
 
 .file-info { display: flex; align-items: center; gap: .75rem; }
-.file-info-icon { font-size: 1.5rem; flex-shrink: 0; }
+.file-info-icon {
+  display: flex; align-items: center; color: var(--color-accent); font-size: 1.5rem; flex-shrink: 0; }
 .file-info-text { flex: 1; text-align: start; min-width: 0; }
 .file-name { font-size: .9rem; font-weight: 600; color: var(--color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .file-size { font-size: .78rem; color: var(--color-text-muted); margin-top: .1rem; }
@@ -473,6 +481,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 
 .lang-select-group { display: flex; flex-direction: column; gap: .375rem; }
 .upload-done-banner {
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
   display: flex; align-items: center; gap: .5rem; justify-content: center;
   padding: .75rem 1rem; border-radius: var(--radius-md);
   background: var(--color-ok-light); color: var(--color-ok); font-weight: 700; font-size: .9rem;
@@ -495,7 +504,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 .jobs-empty { text-align: center; padding: 2.5rem 1rem; }
-.jobs-empty-icon { font-size: 3rem; margin-bottom: .75rem; opacity: .5; }
+.jobs-empty-icon {
+  display: flex; justify-content: center; color: var(--color-text-muted); font-size: 3rem; margin-bottom: .75rem; opacity: .5; }
 .jobs-empty-title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
 .jobs-empty-sub { font-size: .85rem; color: var(--color-text-muted); margin-top: .25rem; }
 
@@ -513,7 +523,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 .job-item:hover:not(.job-item-active):not(:disabled) { background: var(--color-bg); border-color: var(--color-border); }
 .job-item-active { background: var(--color-accent-light); border-color: var(--color-accent); }
 
-.job-file-icon { font-size: 1.25rem; flex-shrink: 0; width: 32px; text-align: center; }
+.job-file-icon { flex-shrink: 0; width: 32px; display: flex; align-items: center; justify-content: center; color: var(--color-accent); }
 .job-info { flex: 1; min-width: 0; }
 .job-name { font-size: .875rem; font-weight: 600; color: var(--color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .job-meta { font-size: .75rem; color: var(--color-text-muted); margin-top: .15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -578,7 +588,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 .transcript-card { }
 .transcript-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .transcript-title { display: flex; align-items: center; gap: .5rem; }
-.transcript-icon { flex-shrink: 0; }
+.transcript-icon { flex-shrink: 0; display: inline-flex; color: var(--color-accent); vertical-align: -3px; }
 .transcript-meta { font-size: .78rem; color: var(--color-text-muted); margin-top: .25rem; }
 
 .transcript-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }

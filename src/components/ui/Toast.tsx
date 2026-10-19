@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
+import { CheckCircle2, XCircle, Info, X } from 'lucide-react';
 
 type ToastVariant = 'ok' | 'bad' | 'info';
 interface ToastItem { id: string; message: string; variant: ToastVariant; }
@@ -30,10 +31,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <ToastPrimitive.Root key={t.id} className={`toast-item ${variantClass[t.variant]}`} duration={4000}>
             <div className="flex items-start gap-3">
               <span className="toast-icon">
-                {t.variant === 'ok' ? '✓' : t.variant === 'bad' ? '✕' : 'ℹ'}
+                {t.variant === 'ok' ? <CheckCircle2 size={17} strokeWidth={2.2} /> : t.variant === 'bad' ? <XCircle size={17} strokeWidth={2.2} /> : <Info size={17} strokeWidth={2.2} />}
               </span>
               <ToastPrimitive.Description className="toast-message">{t.message}</ToastPrimitive.Description>
-              <ToastPrimitive.Close className="toast-close" aria-label="Close">×</ToastPrimitive.Close>
+              <ToastPrimitive.Close className="toast-close" aria-label="Close"><X size={14} /></ToastPrimitive.Close>
             </div>
           </ToastPrimitive.Root>
         ))}

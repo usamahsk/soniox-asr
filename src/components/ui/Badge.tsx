@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check, TriangleAlert } from 'lucide-react';
 
 type StatusVariant = 'uploading' | 'processing' | 'completed' | 'error';
 
@@ -16,9 +17,9 @@ export function Badge({ status }: { status: string }) {
       {status === 'processing' || status === 'uploading' ? (
         <span className="badge-dot-pulse" />
       ) : status === 'completed' ? (
-        <span className="badge-dot-done">✓</span>
+        <Check size={11} strokeWidth={3.5} />
       ) : status === 'error' ? (
-        <span>!</span>
+        <TriangleAlert size={11} strokeWidth={3} />
       ) : null}
       {v.label}
     </span>

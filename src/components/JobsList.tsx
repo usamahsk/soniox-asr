@@ -6,6 +6,7 @@ import { Button } from './ui/Button';
 import { Spinner } from './ui/Spinner';
 import { useToast } from './ui/Toast';
 import type { Job, AppLang } from '../types';
+import { Library, Inbox, AudioLines, TriangleAlert, Hourglass, Trash2 } from 'lucide-react';
 import { makeT } from '../i18n';
 
 interface JobsListProps {
@@ -50,7 +51,7 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
     <section className="card jobs-card">
       {/* Header */}
       <div className="card-header">
-        <div className="card-header-icon">📚</div>
+        <div className="card-header-icon"><Library size={20} strokeWidth={2.2} /></div>
         <div>
           <h2 className="card-title">{t('myLectures')}</h2>
           <p className="card-subtitle">
@@ -74,7 +75,7 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
       {/* Empty */}
       {!loading && jobs.length === 0 && (
         <div className="jobs-empty">
-          <div className="jobs-empty-icon">📭</div>
+          <div className="jobs-empty-icon"><Inbox size={34} strokeWidth={1.6} /></div>
           <div className="jobs-empty-title">{t('noLectures')}</div>
           <div className="jobs-empty-sub">{t('emptySub')}</div>
         </div>
@@ -100,7 +101,7 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
                 >
                   {/* Icon */}
                   <div className="job-file-icon">
-                    {job.status === 'completed' ? '🎵' : job.status === 'error' ? '⚠️' : '⏳'}
+                    {job.status === 'completed' ? <AudioLines size={19} strokeWidth={2.2} /> : job.status === 'error' ? <TriangleAlert size={19} strokeWidth={2.2} /> : <Hourglass size={19} strokeWidth={2.2} />}
                   </div>
                   {/* Info */}
                   <div className="job-info">
@@ -121,9 +122,7 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
                         aria-label={`${t('delete')} ${job.file_name ?? ''}`}
                         onClick={e => { e.stopPropagation(); setConfirmJob(job); }}
                       >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
-                        </svg>
+                        <Trash2 size={14} />
                       </button>
                     ) : (job.status === 'processing' || job.status === 'uploading') ? (
                       <Spinner size="sm" className="job-spinner job-spinner-pulse" />

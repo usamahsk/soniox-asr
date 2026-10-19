@@ -1,6 +1,7 @@
 import React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Avatar from '@radix-ui/react-avatar';
+import { BookOpenText, ChevronDown, LogOut } from 'lucide-react';
 import type { AppLang } from '../types';
 import type { SonioxBalance } from '../hooks/useBalance';
 import { BalancePill } from './BalancePill';
@@ -33,7 +34,7 @@ export function AppShell({ email, lang, onLangChange, onLogout, children, balanc
         <div className="app-header-inner">
           {/* Logo */}
           <div className="app-logo">
-            <div className="app-logo-icon">📖</div>
+            <div className="app-logo-icon"><BookOpenText size={19} strokeWidth={2.2} /></div>
             <div>
               <div className="app-logo-title">{t('appTitle')}</div>
               <div className="app-logo-sub">درس • Lecture</div>
@@ -73,9 +74,7 @@ export function AppShell({ email, lang, onLangChange, onLogout, children, balanc
                     </Avatar.Fallback>
                   </Avatar.Root>
                   <span className="user-email-short">{email.split('@')[0]}</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="user-chevron">
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
+                  <ChevronDown size={14} className="user-chevron" />
                 </button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Portal>
@@ -85,9 +84,7 @@ export function AppShell({ email, lang, onLangChange, onLogout, children, balanc
                   </div>
                   <DropdownMenu.Separator className="dropdown-separator" />
                   <DropdownMenu.Item className="dropdown-item dropdown-item-danger" onSelect={onLogout}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-                    </svg>
+                    <LogOut size={15} />
                     {t('logout')}
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
