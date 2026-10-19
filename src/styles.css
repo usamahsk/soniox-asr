@@ -641,8 +641,7 @@ html[dir="rtl"] .transcript-text { text-align: right; }
   /* Logo: icon + short title only, no subtitle */
   .app-logo { gap: 0.5rem; }
   .app-logo-icon { width: 32px; height: 32px; font-size: 1rem; }
-  .app-logo-title { font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 22vw; }
-  .app-logo-sub { display: none; }
+  .app-logo-title { font-size: .78rem; white-space: nowrap;  text-overflow: ellipsis; max-width: 22vw; }
   /* Right cluster: tighter, wraps if needed */
   .app-header-right { gap: 0.375rem; flex-wrap: wrap; justify-content: flex-end; }
   .balance-pill { padding: .25rem .55rem; font-size: .7rem; }
