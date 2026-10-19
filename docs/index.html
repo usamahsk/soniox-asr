@@ -4,192 +4,21 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content"/>
   <title>درس — Lecture Transcriber</title>
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f0e8"/>
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a"/>
+  <meta name="description" content="Arabic + Urdu lecture transcription powered by Soniox AI"/>
+  <meta name="theme-color" content="#faf9f7"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
   <link rel="manifest" href="./manifest.webmanifest"/>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>"/>
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>"/>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- App config must load before React module -->
   <script src="./config.js"></script>
-  <script type="module" crossorigin src="/soniox-asr/assets/index-pHSYp-9i.js"></script>
-  <link rel="stylesheet" crossorigin href="/soniox-asr/assets/index-BcTu7AKX.css">
+  <script type="module" crossorigin src="/soniox-asr/assets/index-YoxS9Gb5.js"></script>
+  <link rel="stylesheet" crossorigin href="/soniox-asr/assets/index-DFFTM2Gb.css">
 </head>
-<body class="bg-[#1a1a1a] text-[#f5f0e8] antialiased">
-
-<!-- ================= AUTH GATE ================= -->
-<div id="authView" class="min-h-screen flex items-center justify-center p-4 sm:p-6">
-  <div class="w-full max-w-md card-dark rounded-[24px] p-6 sm:p-8 shadow-2xl">
-    <div class="text-6xl text-center mb-2">📖</div>
-    <h1 class="text-3xl font-bold text-center text-[#f5f0e8] mt-2" data-i18n="appTitle">درس ٹرانسکرپشن</h1>
-    <p class="text-center text-[#8a8578] text-sm mt-1 mb-6" data-i18n="appSub">عربی + اردو • login to continue</p>
-
-    <form id="authForm" class="space-y-3">
-      <div>
-        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="emailLabel">ای میل ایڈریس</label>
-        <input id="email" type="email" inputmode="email" placeholder="you@example.com"
-          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
-          required/>
-      </div>
-      <div>
-        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="passLabel">راز کا لفظ (پاس ورڈ)</label>
-        <input id="pass" type="password" placeholder="••••••••"
-          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
-          required/>
-      </div>
-      <button id="login" type="submit" class="w-full bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-3.5 text-lg font-semibold hover:bg-[#5a6d4f] transition-transform active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="login">Login</button>
-      <p class="text-center text-xs text-[#8a8578] mt-4">
-        <span data-i18n="noAccount">No account?</span>
-        <button type="button" id="toSignup" class="text-[#6b7f5e] font-semibold hover:underline ml-1" data-i18n="signUp">Sign up</button>
-      </p>
-    </form>
-
-    <form id="signupForm" class="hidden space-y-3">
-      <div>
-        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="emailLabel">ای میل ایڈریس</label>
-        <input id="semail" type="email" inputmode="email" placeholder="you@example.com"
-          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
-          required/>
-      </div>
-      <div>
-        <label class="block text-xs font-medium text-[#8a8578] mb-1.5" data-i18n="passLabel">راز کا لفظ (پاس ورڈ)</label>
-        <input id="spass" type="password" placeholder="••••••••"
-          class="w-full bg-[#1a1a1a] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#f5f0e8] placeholder-[#8a8578] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e] transition-all"
-          required/>
-      </div>
-      <button type="submit" class="w-full bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-3.5 text-lg font-semibold hover:bg-[#5a6d4f] transition-transform active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="signup">Create account</button>
-      <p class="text-center text-xs text-[#8a8578] mt-4">
-        <span data-i18n="haveAccount">Already have an account?</span>
-        <button type="button" id="toLogin" class="text-[#6b7f5e] font-semibold hover:underline ml-1" data-i18n="login">Login</button>
-      </p>
-    </form>
-  </div>
-</div>
-
-<!-- ================= APP ================= -->
-<div id="app" class="hidden max-w-2xl mx-auto p-3 sm:p-4 pb-12 app-shell">
-
-  <!-- Header -->
-  <header class="sticky top-0 z-20 bg-[#1a1a1a]/90 backdrop-blur-md border-b border-[#245,240,232,0.08] py-3 flex items-center justify-between" style="padding-top:calc(0.75rem + env(safe-area-inset-top))">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-[#6b7f5e] flex items-center justify-center text-xl">📖</div>
-      <div>
-        <div class="font-bold text-lg leading-tight text-[#f5f0e8]" data-i18n="appTitle">📖 درس ٹرانسکرپشن</div>
-        <div id="who" class="text-xs text-[#8a8578] mt-0.5"></div>
-      </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <select id="applang" class="bg-[#2d2d2d] border border-[#1a1a1a,0.08] rounded-xl px-3 py-2 text-xs text-[#f5f0e8] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e]">
-        <option value="ur">اردو</option>
-        <option value="en">EN</option>
-      </select>
-      <button id="logout" class="text-xs font-medium text-[#8a8578] bg-[#2d2d2d] hover:bg-[#1a1a1a] rounded-lg px-3 py-2 transition-colors" data-i18n="logout">Logout</button>
-    </div>
-  </header>
-
-  <!-- Upload card -->
-  <section class="card rounded-[24px] p-4 sm:p-6 mt-4 shadow-sm">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="font-bold text-lg text-[#1a1a1a]" data-i18n="newLecture">nueva grabación</h2>
-      <span id="uploadStatus" class="text-xs text-[#8a8578] hidden"></span>
-    </div>
-
-    <label for="file" class="block w-full border-2 border-dashed border-[#1a1a1a,0.08] rounded-[24px] p-8 sm:p-10 text-center cursor-pointer hoverable transition-all hover:border-[#6b7f5e] hover:bg-[#f5f0e8,0.3]" id="dropZone">
-      <div class="text-4xl mb-2">📁</div>
-      <span class="text-lg font-semibold text-[#1a1a1a]" data-i18n="selectFile">ریکارڈنگ منتخب کریں</span>
-      <p class="text-xs text-[#8a8578] mt-1" data-i18n="fileHint">m4a / mp3 / wav / opus — 1 تا 4 گھنٹے</p>
-    </label>
-    <input type="file" id="file" accept="audio/*,.opus,.mp3,.m4a,.wav,.ogg,.mp4" class="hidden"/>
-
-    <div id="fileInfo" class="hidden mt-4">
-      <div class="flex items-center justify-between p-3 bg-[#ede8dc] rounded-xl mb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-xs text-[#f5f0e8]">🎵</div>
-          <div>
-            <div class="text-sm font-medium text-[#1a1a1a]" id="fname"></div>
-            <div class="text-xs text-[#8a8578]" id="fsize"></div>
-          </div>
-        </div>
-        <button id="removeFile" class="text-[#b85c5c] hover:text-[#a84c4c] text-sm" title="Remove file">✕</button>
-      </div>
-
-      <div class="mb-3">
-        <label class="block text-xs font-medium text-[#8a8578] mb-2" data-i18n="langInLecture">🌐 Languages in lecture</label>
-        <select id="lang" class="w-full border border-[#1a1a1a,0.08] rounded-xl p-3 bg-[#f5f0e8] text-[#1a1a1a] outline-none focus:border-[#6b7f5e] focus:ring-1 focus:ring-[#6b7f5e]">
-          <option value="ur-ar" selected>اردو + عربی (Urdu + Arabic)</option>
-          <option value="ur">اردو صرف (Urdu only)</option>
-          <option value="ar">عربی صرف (Arabic only)</option>
-          <option value="hi">ہندی (Hindi)</option>
-          <option value="gu">گجراتی (Gujarati)</option>
-          <option value="multi">Auto-detect (all)</option>
-        </select>
-      </div>
-
-      <button id="up" class="w-full bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-4 text-lg font-semibold hover:bg-[#5a6d4f] transition-all active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg" data-i18n="uploadBtn">⬆️ Upload + Transcribe</button>
-
-      <div class="mt-4">
-        <div class="flex justify-between text-xs text-[#8a8578] mb-1">
-          <span data-i18n="progress">Progress</span>
-          <span id="pctText">0%</span>
-        </div>
-        <div class="h-2 bg-[#ede8dc] rounded-full overflow-hidden">
-          <div id="bar" class="h-full bg-[#6b7f5e] rounded-full transition-all duration-300" style="width:0%"></div>
-        </div>
-        <div id="st" class="text-sm text-[#8a8578] mt-2 min-h-[1.5rem]"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Jobs list -->
-  <section class="card rounded-[24px] p-4 sm:p-6 mt-4 shadow-sm">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="font-bold text-lg text-[#1a1a1a]" data-i18n="myLectures">میری دروس</h2>
-      <span id="jobsCount" class="text-xs font-medium text-[#1a1a1a] bg-[#ede8dc] px-2.5 py-0.5 rounded-full">0</span>
-    </div>
-
-    <div id="jobsSkeleton" class="space-y-3">
-      <div class="skeleton h-14 w-3/4"></div>
-      <div class="skeleton h-14 w-1/2"></div>
-      <div class="skeleton h-14 w-full"></div>
-    </div>
-
-    <div id="jobs" class="divide-y divide-[#1a1a1a,0.08] hidden"></div>
-
-    <div id="jobsEmpty" class="text-center py-12 hidden">
-      <div class="text-6xl mb-3">📭</div>
-      <h3 class="font-bold text-lg text-[#1a1a1a]" data-i18n="noLectures">No lectures yet</h3>
-      <p class="text-sm text-[#8a8578] mt-1 max-w-xs mx-auto" data-i18n="emptySub">Upload a recording to get started</p>
-    </div>
-  </section>
-
-  <!-- Transcript viewer -->
-  <section id="transcriptSection" class="hidden card rounded-[24px] p-4 sm:p-6 mt-4 shadow-sm">
-    <div class="flex flex-wrap gap-2 mb-4 sm:mb-6">
-      <button id="dlTxt" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="dlTxt">📄 .txt</button>
-      <button id="dlDoc" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="dlDoc">📝 Word</button>
-      <button id="dlPdf" class="flex-1 min-w-[120px] bg-[#6b7f5e] text-[#f5f0e8] rounded-xl px-4 py-3 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#5a6d4f] shadow-lg" data-i18n="dlPdf">🖨️ PDF</button>
-      <button id="copyTxt" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="copyTxt">📋 Copy</button>
-      <button id="shareTxt" class="flex-1 min-w-[120px] border border-[#1a1a1a,0.08] rounded-xl px-4 py-3 text-[#1a1a1a] text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-[#ede8dc]" data-i18n="shareTxt">🔗 Share</button>
-    </div>
-
-    <div id="transcript" class="whitespace-pre-wrap leading-[2.4] min-h-[160px] text-[#1a1a1a] bg-[#ede8dc] p-4 rounded-xl border border-[#1a1a1a,0.08]">…</div>
-
-    <div id="transcriptActions" class="mt-4 flex items-center justify-between text-xs text-[#8a8578]">
-      <span id="jobMeta"></span>
-      <button id="deleteJob" class="text-[#b85c5c] hover:text-[#a84c4c] hover:underline font-medium" data-i18n="delete">Delete lecture</button>
-    </div>
-  </section>
-
-</div>
-
-<!-- Print-only transcript -->
-<div class="print-area" id="print-area"></div>
-
-<!-- Toast container -->
-<div id="toastContainer" class="toast"></div>
-
+<body>
+  <div id="root"></div>
 </body>
 </html>
