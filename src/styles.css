@@ -516,20 +516,25 @@ button:active:not(:disabled) { transform: scale(.97); }
 .job-file-icon { font-size: 1.25rem; flex-shrink: 0; width: 32px; text-align: center; }
 .job-info { flex: 1; min-width: 0; }
 .job-name { font-size: .875rem; font-weight: 600; color: var(--color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.job-meta { font-size: .75rem; color: var(--color-text-muted); margin-top: .15rem; }
+.job-meta { font-size: .75rem; color: var(--color-text-muted); margin-top: .15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.job-right { display: flex; flex-direction: column; align-items: flex-end; gap: .375rem; flex-shrink: 0; }
+.job-right { display: flex; flex-direction: row; align-items: center; gap: .375rem; flex-shrink: 0; }
 .job-spinner { color: var(--color-accent); }
 .job-spinner-pulse { animation: spin .7s linear infinite, pulse-opacity 2s ease infinite; }
 @keyframes pulse-opacity { 0%,100%{opacity:1} 50%{opacity:.5} }
 .job-delete-btn {
-  width: 26px; height: 26px; border-radius: var(--radius-sm);
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   color: var(--color-text-muted); background: transparent;
   border: none; cursor: pointer; opacity: 0;
+  flex-shrink: 0;
   transition: opacity .15s, background .15s, color .15s;
 }
-.job-item:hover .job-delete-btn { opacity: 1; }
+.job-item:hover .job-delete-btn, .job-item:focus-within .job-delete-btn { opacity: 1; }
+/* No hover on touch — delete must always be visible/tappable */
+@media (hover: none) {
+  .job-delete-btn { opacity: 1; }
+}
 .job-delete-btn:hover { background: var(--color-err-light); color: var(--color-err); }
 
 /* Scrollbar */
@@ -640,4 +645,14 @@ html[dir="rtl"] .transcript-text { text-align: right; }
 @media (max-width: 360px) {
   .app-logo-title { display: none; } /* icon only on very small screens */
   .app-header-inner { padding: 0.5rem 0.625rem; }
+}
+
+/* Jobs list — fit chip + delete on 375px screens */
+@media (max-width: 560px) {
+  .job-item { gap: .5rem; padding: .625rem .75rem; }
+  .job-file-icon { width: 26px; font-size: 1.05rem; }
+  .job-name { font-size: .8rem; }
+  .job-meta { font-size: .7rem; }
+  .job-right { gap: .25rem; }
+  .badge { font-size: .62rem; padding: .18rem .45rem; letter-spacing: .02em; }
 }

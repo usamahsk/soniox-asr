@@ -88,12 +88,15 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
               const isActive = job.id === currentJobId;
               const isDeleting = deletingId === job.id;
               return (
-                <button
+                <div
                   key={job.id}
                   className={`job-item ${isActive ? 'job-item-active' : ''}`}
-                  onClick={() => !isDeleting && onSelect(job)}
-                  disabled={isDeleting}
+                  role="button"
+                  tabIndex={isDeleting ? -1 : 0}
                   aria-current={isActive ? 'true' : undefined}
+                  aria-disabled={isDeleting ? 'true' : undefined}
+                  onClick={() => !isDeleting && onSelect(job)}
+                  onKeyDown={e => { if (!isDeleting && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect(job); } }}
                 >
                   {/* Icon */}
                   <div className="job-file-icon">
@@ -126,7 +129,7 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
                       <Spinner size="sm" className="job-spinner job-spinner-pulse" />
                     ) : null}
                   </div>
-                </button>
+                </div>
               );
             })}
           </ScrollArea.Viewport>
