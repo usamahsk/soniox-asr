@@ -21,6 +21,7 @@ declare global {
       TRANSCRIBE_FN: string;
       STATUS_FN: string;
       BALANCE_FN: string;
+      TRANSLIT_FN: string;
     };
   }
 }

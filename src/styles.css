@@ -26,6 +26,8 @@
 
   --font-urdu:  "Noto Nastaliq Urdu", Amiri, serif;
   --font-latin: "Inter", system-ui, sans-serif;
+  --font-gujarati: "Noto Sans Gujarati", "Inter", sans-serif;
+  --font-devanagari: "Noto Sans Devanagari", "Inter", sans-serif;
 
   --shadow-sm:  0 1px 2px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
   --shadow-md:  0 4px 8px -2px rgba(0,0,0,.08),0 2px 4px -2px rgba(0,0,0,.06);
@@ -572,10 +574,11 @@ button:active:not(:disabled) { transform: scale(.97); }
   scrollbar-color: var(--color-border) transparent;
   padding-inline-end: 4px;
 }
-.jobs-scroll::-webkit-scrollbar { width: 8px; }
-.jobs-scroll::-webkit-scrollbar-track { background: transparent; }
-.jobs-scroll::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: var(--radius-full); }
-.jobs-scroll::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+.jobs-scroll, .transcript-scroll { scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+.jobs-scroll::-webkit-scrollbar, .transcript-scroll::-webkit-scrollbar { width: 8px; }
+.jobs-scroll::-webkit-scrollbar-track, .transcript-scroll::-webkit-scrollbar-track { background: transparent; }
+.jobs-scroll::-webkit-scrollbar-thumb, .transcript-scroll::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: var(--radius-full); }
+.jobs-scroll::-webkit-scrollbar-thumb:hover, .transcript-scroll::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
 .jobs-list { display: flex; flex-direction: column; gap: .375rem; padding: 2px; padding-bottom: .25rem; min-width: 0; }
 
 .job-item {

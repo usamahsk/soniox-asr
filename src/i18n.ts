@@ -15,6 +15,7 @@ export interface Strings {
   dropHere: string; userMenu: string; langUrAr: string; langUr: string;
   langAr: string; langHi: string; langGu: string; langMulti: string;
   balance: string; balanceFailed: string;
+  original: string; translitFailed: string;
 }
 
 export const I18N: Record<AppLang, Strings> = {
@@ -42,6 +43,7 @@ export const I18N: Record<AppLang, Strings> = {
     langUrAr: 'اردو + عربی', langUr: 'صرف اردو', langAr: 'صرف عربی',
     langHi: 'ہندی', langGu: 'گجراتی', langMulti: 'خودکار شناخت',
     balance: 'بیلنس', balanceFailed: 'بیلنس لوڈ ناکام',
+    original: 'اصل', translitFailed: 'رسم الخط تبدیل ناکام',
   },
   en: {
     appTitle: 'Lecture Transcriber', appSub: 'Arabic + Urdu • Login to continue',
@@ -67,6 +69,7 @@ export const I18N: Record<AppLang, Strings> = {
     langUrAr: 'Urdu + Arabic', langUr: 'Urdu only', langAr: 'Arabic only',
     langHi: 'Hindi', langGu: 'Gujarati', langMulti: 'Auto-detect',
     balance: 'Balance', balanceFailed: 'Balance load failed',
+    original: 'Original', translitFailed: 'Transliteration failed',
   },
 };
 

@@ -1,6 +1,6 @@
 // minimal PWA shell cache — safe on GitHub Pages
 // Bump version string any time you deploy to force cache refresh
-const C = "bayan-v4";
+const C = "bayan-v5";
 const ASSETS = ["./", "./index.html", "./config.js", "./manifest.webmanifest"];
 
 self.addEventListener("install", (e) => {

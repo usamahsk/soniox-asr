@@ -92,17 +92,22 @@ export function useDownload(fullText: string, fullName: string, dir: 'rtl' | 'lt
       return;
     }
 
-    const fontFamily = dir === 'rtl'
+    const hasIndic = /[\u0900-\u097F\u0A80-\u0AFF]/.test(fullText); // Devanagari / Gujarati blocks
+    const fontFamily = dir === 'rtl' && !hasIndic
       ? "'Noto Nastaliq Urdu','Amiri',serif"
-      : "'Inter',system-ui,sans-serif";
+      : hasIndic && /[\u0900-\u097F]/.test(fullText)
+        ? "'Noto Sans Devanagari','Inter',sans-serif"
+        : hasIndic
+          ? "'Noto Sans Gujarati','Inter',sans-serif"
+          : "'Inter',system-ui,sans-serif";
 
     doc.open();
     doc.write(`<!doctype html>
-<html lang="${dir === 'rtl' ? 'ur' : 'en'}" dir="${dir}">
+<html lang="${dir === 'rtl' && !hasIndic ? 'ur' : 'en'}" dir="${dir}">
 <head>
 <meta charset="utf-8">
 <title>${esc(fullName)}</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Amiri:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Amiri:wght@400;700&family=Inter:wght@400;500;600&family=Noto+Sans+Gujarati:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
 <style>
   @page { margin: 15mm; }
   * { box-sizing: border-box; }
