@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as ScrollArea from '@radix-ui/react-scroll-area';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
@@ -83,8 +82,8 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
 
       {/* List */}
       {!loading && jobs.length > 0 && (
-        <ScrollArea.Root className="jobs-scroll" type="auto">
-          <ScrollArea.Viewport className="jobs-list">
+        <div className="jobs-scroll">
+          <div className="jobs-list">
             {jobs.map(job => {
               const isActive = job.id === currentJobId;
               const isDeleting = deletingId === job.id;
@@ -132,11 +131,8 @@ export function JobsList({ jobs, loading, currentJobId, lang, onSelect, onDelete
                 </div>
               );
             })}
-          </ScrollArea.Viewport>
-          <ScrollArea.Scrollbar orientation="vertical" className="scrollbar">
-            <ScrollArea.Thumb className="scrollbar-thumb" />
-          </ScrollArea.Scrollbar>
-        </ScrollArea.Root>
+          </div>
+        </div>
       )}
 
       {/* Delete Confirmation Dialog */}

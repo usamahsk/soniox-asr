@@ -1,5 +1,6 @@
 import React from 'react';
 import type { SonioxBalance } from '../hooks/useBalance';
+import { useUsdToInr, usdToInr, fmtInr } from '../hooks/useFx';
 import type { AppLang } from '../types';
 import { makeT } from '../i18n';
 
@@ -13,9 +14,10 @@ interface BalancePillProps {
 
 export function BalancePill({ balance, loading, error, lang, onRefresh }: BalancePillProps) {
   const t = makeT(lang);
+  const rate = useUsdToInr();
 
-  const available = balance?.available_balance_usd != null ? parseFloat(balance.available_balance_usd) : null;
-  const low = available != null && available < 2 && !balance?.invoice_billing_enabled;
+  const available = usdToInr(balance?.available_balance_usd, rate);
+  const low = available != null && available < 200 && !balance?.invoice_billing_enabled;
   const exhausted = balance?.balance_exhausted;
 
   const label = loading
@@ -25,13 +27,13 @@ export function BalancePill({ balance, loading, error, lang, onRefresh }: Balanc
       : balance?.invoice_billing_enabled
         ? 'INV'
         : available != null
-          ? `$${available.toFixed(2)}`
+          ? fmtInr(available)
           : '?';
 
   const title = error
     ? `${t('balanceFailed')}: ${error}`
     : balance
-      ? `${t('balance')}: $${balance.available_balance_usd ?? '?'} (free $${balance.free_balance_usd ?? '0'} • used $${balance.used_balance_usd ?? '0'})${balance.autopay_enabled ? ` • autopay $${balance.autopay_amount_usd} @ $${balance.autopay_threshold_usd}` : ''}`
+      ? `${t('balance')}: ${fmtInr(available)} (free ${fmtInr(usdToInr(balance.free_balance_usd, rate))} • used ${fmtInr(usdToInr(balance.used_balance_usd, rate))})${balance.autopay_enabled ? ` • autopay ${fmtInr(usdToInr(balance.autopay_amount_usd, rate))} @ ${fmtInr(usdToInr(balance.autopay_threshold_usd, rate))}` : ''}`
       : t('balance');
 
   return (

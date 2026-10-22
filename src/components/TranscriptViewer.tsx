@@ -3,6 +3,7 @@ import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { Button } from './ui/Button';
 import { useDownload } from '../hooks/useDownload';
 import { useToast } from './ui/Toast';
+import { AudioPlayer } from './AudioPlayer';
 import type { Job, AppLang } from '../types';
 import { FileText, FileDiff, Printer, Copy, Share2, Trash2 } from 'lucide-react';
 import { makeT } from '../i18n';
@@ -73,6 +74,9 @@ export function TranscriptViewer({ job, fullText, lang, onDeleteJob }: Transcrip
           </div>
         </div>
       </div>
+
+      {/* Audio player */}
+      <AudioPlayer audioPath={job.audio_path} fileName={job.file_name ?? undefined} />
 
       {/* Action buttons */}
       <div className="transcript-actions">
