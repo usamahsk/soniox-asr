@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Local env / secrets
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Supabase local artifacts
+supabase/.temp/
