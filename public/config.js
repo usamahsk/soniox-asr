@@ -4,5 +4,7 @@ window.APP_CONFIG = {
   TRANSCRIBE_FN: "transcribe",
   STATUS_FN: "status",
   BALANCE_FN: "balance",
-  TRANSLIT_FN: "transliterate-text"
+  TRANSLIT_FN: "transliterate-text-llm",
+  LLM_API_BASE: "https://api.openai.com/v1",
+  LLM_MODEL: "gpt-4o",
 };

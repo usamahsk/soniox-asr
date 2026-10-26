@@ -22,6 +22,8 @@ declare global {
       STATUS_FN: string;
       BALANCE_FN: string;
       TRANSLIT_FN: string;
+      LLM_API_BASE: string;
+      LLM_MODEL: string;
     };
   }
 }
